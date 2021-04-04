@@ -23,7 +23,7 @@ public class BaseTest {
         addListener(ALLURE_SELENIDE_LISTENER_NAME, new AllureSelenide().screenshots(true).savePageSource(true));
         Configuration.baseUrl = RAIFF_BANK_DEMO_PAGE_URL;
         Configuration.browser = CONFIG.browser();
-        Configuration.browserVersion = CONFIG.browserVersion();
+        Configuration.timeout = 5000;
         if (CONFIG.remoteUrl() != null) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("enableVNC", true);
