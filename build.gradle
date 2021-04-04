@@ -7,13 +7,15 @@ plugins {
 sourceCompatibility = 1.8
 
 repositories {
+    maven { url = "https://dl.bintray.com/qameta/maven-unstable/" }
     mavenCentral()
 }
 def allureVersion = "2.13.8",
-        selenideVersion = "5.18.0",
-        junitVersion = "5.7.0",
-        javafakerVersion = "1.0.2",
-        ownerVersion = "1.0.12"
+    allureEEVersion = "3.28.2",
+    selenideVersion = "5.18.0",
+    junitVersion = "5.7.0",
+    javafakerVersion = "1.0.2",
+    ownerVersion = "1.0.12"
 
 allure {
     version = "${allureVersion}"
@@ -24,9 +26,10 @@ allure {
     }
 }
 dependencies {
-    testImplementation (
+    testImplementation(
             "com.codeborne:selenide:$selenideVersion",
             "io.qameta.allure:allure-selenide:$allureVersion",
+            "io.qameta.allure:allure-ee-junit-platform:$allureEEVersion",
             "com.github.javafaker:javafaker:$javafakerVersion",
             "org.junit.jupiter:junit-jupiter-api:$junitVersion",
             "org.junit.jupiter:junit-jupiter-params:$junitVersion",
@@ -37,6 +40,16 @@ dependencies {
 
 tasks.withType(Test) {
     systemProperties += System.properties
+    System.setProperty("junit.jupiter.extensions.autodetection.enabled", "true")
+    if (System.getProperty("threads") != null) {
+        systemProperties += [
+                'junit.jupiter.execution.parallel.enabled'                 : true,
+                'junit.jupiter.execution.parallel.mode.default'            : 'concurrent',
+                'junit.jupiter.execution.parallel.mode.classes.default'    : 'concurrent',
+                'junit.jupiter.execution.parallel.config.strategy'         : 'fixed',
+                'junit.jupiter.execution.parallel.config.fixed.parallelism': System.getProperty("threads").toInteger()
+        ]
+    }
 }
 
 test {
