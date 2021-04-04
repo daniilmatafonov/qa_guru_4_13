@@ -1,10 +1,12 @@
 package tests;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import pages.TopMenuPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
+@Tag("web")
 public class MenuTest extends BaseTest{
 
     private final TopMenuPage menuPage = new TopMenuPage();

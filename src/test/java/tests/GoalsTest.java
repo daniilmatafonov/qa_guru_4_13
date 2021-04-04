@@ -2,11 +2,13 @@ package tests;
 
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import pages.GoalsPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
+@Tag("web")
 public class GoalsTest extends BaseTest{
 
     private final GoalsPage goalsPage = new GoalsPage();

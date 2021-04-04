@@ -1,11 +1,13 @@
 package tests;
 
 import com.github.javafaker.Faker;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import pages.LoansPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
+@Tag("web")
 public class LoansTest extends BaseTest {
 
     private final LoansPage loansPage = new LoansPage();
