@@ -10,8 +10,10 @@ import java.nio.charset.StandardCharsets;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.openqa.selenium.logging.LogType.BROWSER;
+import static tests.BaseTest.CONFIG;
 
-public class AttachmentsHelperToAllure {
+public class AttachmentHelper {
+
     @Attachment(value = "{attachName}", type = "text/plain")
     public static String attachAsText(String attachName, String message) {
         return message;
@@ -35,14 +37,14 @@ public class AttachmentsHelperToAllure {
     }
 
     public static String getVideoUrl() {
-        return System.getProperty("video_storage") + getSessionId() + ".mp4";
+        return CONFIG.videoStorage() + getSessionId() + ".mp4";
     }
 
-    public static String getSessionId() {
+    public static String getSessionId(){
         return ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     }
 
-    public static String getConsoleLogs() {
+    public static String getLogs() {
         return String.join("\n", Selenide.getWebDriverLogs(BROWSER));
     }
 }

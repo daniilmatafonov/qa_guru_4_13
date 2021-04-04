@@ -1,7 +1,7 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
-import config.EnvironmentConfig;
+import config.IConfig;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -10,24 +10,26 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
-import static helpers.AttachmentsHelperToAllure.*;
+import static helpers.AttachmentHelper.*;
 
 public class BaseTest {
-    static final EnvironmentConfig config = ConfigFactory.create(EnvironmentConfig.class, System.getProperties());
+
+    public static final IConfig CONFIG = ConfigFactory.create(IConfig.class, System.getProperties());
+    private static final String ALLURE_SELENIDE_LISTENER_NAME = "AllureSelenide";
+    private static final String RAIFF_BANK_DEMO_PAGE_URL = "https://online.raiffeisen.ru/demo";
+
     @BeforeAll
     static void setup() {
-        addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
-        Configuration.browser = config.browser();
-        Configuration.browserVersion = config.browserVersion();
-        Configuration.startMaximized = true;
-        Configuration.baseUrl = "https://demoqa.com";
-
-        if (config.webDriverUrl() != null) {
+        addListener(ALLURE_SELENIDE_LISTENER_NAME, new AllureSelenide().screenshots(true).savePageSource(true));
+        Configuration.baseUrl = RAIFF_BANK_DEMO_PAGE_URL;
+        Configuration.browser = CONFIG.browser();
+        Configuration.browserVersion = CONFIG.browserVersion();
+        if (CONFIG.remoteUrl() != null) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("enableVNC", true);
             capabilities.setCapability("enableVideo", true);
             Configuration.browserCapabilities = capabilities;
-            Configuration.remote = config.webDriverUrl();
+            Configuration.remote = CONFIG.remoteUrl();
         }
     }
 
@@ -35,8 +37,8 @@ public class BaseTest {
     public void afterEach() {
         attachScreenshot("Last screenshot");
         attachPageSource();
-        attachAsText("Browser console logs", getConsoleLogs());
-        if (config.videoStorage()!= null)
+        attachAsText("Browser logs", getLogs());
+        if (CONFIG.videoStorage() != null)
             attachVideo();
         closeWebDriver();
     }
